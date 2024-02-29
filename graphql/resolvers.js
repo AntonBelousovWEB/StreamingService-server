@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 
 const resolvers = {
   Query: {
@@ -13,22 +14,22 @@ const resolvers = {
   },
   Mutation: {
     registerUser: async (_, { registerUserInput: { name, email, password, color } }) => {
-      const existingUser = await User.findOne().or([{ name }, { color }]);
+      const existingUser = await User.findOne().or([{ email }, { color }]);
     
       if (existingUser) {
-        if (existingUser.name === name) {
-          throw new Error(`The name ${name} is taken!`);
-        } else {
-          throw new Error(`The color ${color} is taken!`);
+        if (existingUser.email === email) {
+          throw new Error(`The email ${email} is taken!`);
         }
       }
     
       const encryptedPassword = await bcrypt.hash(password, 10);
+      const streamKey = uuidv4();
     
       const createdUser = new User({
         name,
         email,
         password: encryptedPassword,
+        streamKey,
       });
     
       const token = jwt.sign(
