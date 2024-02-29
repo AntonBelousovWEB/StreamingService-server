@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "apollo-server": "^3.13.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.0",
+    "node-media-server": "^2.6.2"
+  }
+}

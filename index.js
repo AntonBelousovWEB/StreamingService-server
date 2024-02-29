@@ -1,38 +1,28 @@
 const NodeMediaServer = require("node-media-server");
+const { ApolloServer } = require("apollo-server");
+const { config } = require('./mediaServer/config');
+const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+dotenv.config();
 
-const httpConfig = {
-  port: 8000,
-  allow_origin: "*",
-  mediaroot: "./media",
-};
-
-const rtmpConfig = {
-  port: 1935,
-  chunk_size: 60000,
-  gop_cache: true,
-  ping: 10,
-  ping_timeout: 60,
-};
-
-const transformationConfig = {
-  ffmpeg: "./ffmpeg.exe",
-  tasks: [
-    {
-      app: "live",
-      hls: true,
-      hlsFlags: "[hls_time=2:hls_list_size=3:hls_flags=delete_segments]",
-      hlsKeep: false,
-    },
-  ],
-  MediaRoot: "./media",
-};
-
-const config = {
-  http: httpConfig,
-  rtmp: rtmpConfig,
-  trans: transformationConfig,
-};
+const MONGODB_KEY = process.env.MONGODB_KEY;
 
 const nms = new NodeMediaServer(config);
-
 nms.run();
+
+const typeDefs = require("./graphql/typeDefs");
+const resolvers = require("./graphql/resolvers");
+
+const server = new ApolloServer({
+    typeDefs,
+    resolvers
+});
+
+mongoose.connect(MONGODB_KEY, { useNewUrlParser: true })
+    .then(() => {
+        console.log("MongoDB connection successful");
+        return server.listen({port: 3000});
+    })
+    .then((res) => {
+        console.log(`Server running at ${res.url}`);
+    });
