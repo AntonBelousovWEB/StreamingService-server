@@ -1,4 +1,11 @@
 {
+  "name": "node_media_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
   "dependencies": {
     "@apollo/server": "^4.10.0",
     "apollo-server": "^3.13.0",
@@ -7,6 +14,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.0",
     "node-media-server": "^2.6.2",
+    "nodemon": "^3.1.0",
     "uuid": "^9.0.1"
   }
 }
