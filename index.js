@@ -1,4 +1,3 @@
-const NodeMediaServer = require("node-media-server");
 const { ApolloServer } = require("apollo-server");
 const mongoose = require("mongoose");
 const node_media_server = require('./media_server');

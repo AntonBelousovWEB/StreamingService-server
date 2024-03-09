@@ -26,6 +26,11 @@ const transformationConfig = {
 };
   
 const config = {
+  auth: {
+    api : true,
+    api_user: 'admin',
+    api_pass: 'admin',
+  },
   logType: 1,
   http: httpConfig,
   rtmp: rtmpConfig,
