@@ -2,6 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
+const { ApolloError } = require('apollo-server-errors');
 
 const resolvers = {
   Query: {
@@ -10,6 +11,20 @@ const resolvers = {
     },
     getUser: async (_, { amount }) => {
       return await User.find().limit(amount);
+    },
+    getUserByKey: async (_, { token, key }) => {
+      const user = await User.findOne({ tokenJWT: token });
+      if(!user) {
+        throw new ApolloError('User is not authenticated', {
+          extensions: {
+            code: 'UNAUTHENTICATED',
+            http: { status: 401 },
+          },
+        });
+      } else {
+        const streamer = await User.findOne({ streamKey: key });
+        return { name: streamer.name };;
+      }
     },
   },
   Mutation: {

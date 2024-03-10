@@ -23,6 +23,7 @@ module.exports = gql`
     type Query {
         users(ID: ID!): User!
         getUser(amount: Int): [User]
+        getUserByKey(token: String!, key: String!): User!
     }
 
     type Mutation {
